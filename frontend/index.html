@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sv">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,95 +7,263 @@
   <title>Dagens svenska dagar</title>
 
   <style>
+    :root {
+      --bg: #eef3f8;
+      --card: #ffffff;
+      --text: #172033;
+      --muted: #64748b;
+      --primary: #2563eb;
+      --primary-soft: #dbeafe;
+      --green-soft: #dcfce7;
+      --green: #166534;
+      --yellow-soft: #fef9c3;
+      --yellow: #854d0e;
+      --purple-soft: #f3e8ff;
+      --purple: #6b21a8;
+      --red-soft: #fee2e2;
+      --red: #991b1b;
+      --border: #e5e7eb;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f4f6f8;
-      color: #1f2937;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, #bfdbfe 0, transparent 32%),
+        radial-gradient(circle at bottom right, #ddd6fe 0, transparent 30%),
+        var(--bg);
+      color: var(--text);
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 2rem;
     }
 
     .card {
-      background: white;
-      padding: 2rem;
-      border-radius: 16px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-      max-width: 600px;
-      width: 90%;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
+      padding: 2.2rem;
+      border-radius: 24px;
+      box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      max-width: 720px;
+      width: 100%;
     }
 
-    h1 {
-      margin-top: 0;
-    }
-
-    .date {
-      font-size: 1.2rem;
-      font-weight: bold;
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--primary-soft);
+      color: var(--primary);
+      padding: 0.45rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
       margin-bottom: 1rem;
     }
 
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3rem);
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+    }
+
+    .intro {
+      color: var(--muted);
+      line-height: 1.6;
+      margin: 1rem 0 2rem;
+      max-width: 620px;
+    }
+
+    .date-box {
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      color: white;
+      padding: 1.3rem;
+      border-radius: 18px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 12px 28px rgba(37, 99, 235, 0.25);
+    }
+
+    .date-label {
+      font-size: 0.9rem;
+      opacity: 0.85;
+      margin-bottom: 0.35rem;
+    }
+
+    .date {
+      font-size: 1.6rem;
+      font-weight: 800;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 1.2rem;
+    }
+
     .section {
-      margin-top: 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1rem;
+      background: #fff;
+      min-height: 150px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+
+    .holiday-icon {
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .halfday-icon {
+      background: var(--yellow-soft);
+      color: var(--yellow);
+    }
+
+    .bridge-icon {
+      background: var(--purple-soft);
+      color: var(--purple);
     }
 
     .label {
-      color: #6b7280;
-      font-size: 0.9rem;
-      margin-bottom: 0.3rem;
+      font-weight: 800;
+      font-size: 1rem;
     }
 
     ul {
+      margin: 0;
       padding-left: 1.2rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    li {
+      margin-bottom: 0.35rem;
     }
 
     .empty {
-      color: #6b7280;
+      color: var(--muted);
+      list-style: none;
+      margin-left: -1.2rem;
+      font-size: 0.95rem;
     }
 
     .error {
       display: none;
-      background: #fef2f2;
-      color: #991b1b;
-      padding: 0.8rem;
-      border-radius: 8px;
-      margin-top: 1rem;
+      background: var(--red-soft);
+      color: var(--red);
+      padding: 0.9rem 1rem;
+      border-radius: 14px;
+      margin-top: 1.2rem;
+      font-weight: 600;
+    }
+
+    .footer {
+      margin-top: 1.6rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.85rem;
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 720px) {
+      body {
+        padding: 1rem;
+      }
+
+      .card {
+        padding: 1.4rem;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .date {
+        font-size: 1.35rem;
+      }
     }
   </style>
 </head>
 
 <body>
   <main class="card">
+    <div class="badge">🇸🇪 Svensk kalenderstatus</div>
+
     <h1>Dagens svenska dagar</h1>
 
-    <p>
-      Den här sidan visar dagens datum och om det finns någon svensk helgdag,
-      halvdag eller klämdag.
+    <p class="intro">
+      Den här sidan visar dagens datum och kontrollerar om det finns någon svensk
+      helgdag, halvdag eller klämdag. Informationen hämtas automatiskt via ett
+      serverless API på AWS.
     </p>
 
-    <div class="section">
-      <div class="label">Datum</div>
+    <section class="date-box">
+      <div class="date-label">Dagens datum</div>
       <div id="date" class="date">Loading...</div>
-    </div>
+    </section>
 
-    <div class="section">
-      <div class="label">Helgdagar</div>
-      <ul id="holidays"></ul>
-    </div>
+    <section class="grid">
+      <div class="section">
+        <div class="section-header">
+          <div class="icon holiday-icon">🎉</div>
+          <div class="label">Helgdagar</div>
+        </div>
+        <ul id="holidays"></ul>
+      </div>
 
-    <div class="section">
-      <div class="label">Halvdagar</div>
-      <ul id="halfDays"></ul>
-    </div>
+      <div class="section">
+        <div class="section-header">
+          <div class="icon halfday-icon">🕒</div>
+          <div class="label">Halvdagar</div>
+        </div>
+        <ul id="halfDays"></ul>
+      </div>
 
-    <div class="section">
-      <div class="label">Klämdagar</div>
-      <ul id="bridgeDays"></ul>
-    </div>
+      <div class="section">
+        <div class="section-header">
+          <div class="icon bridge-icon">🌉</div>
+          <div class="label">Klämdagar</div>
+        </div>
+        <ul id="bridgeDays"></ul>
+      </div>
+    </section>
 
     <div id="error" class="error"></div>
+
+    <div class="footer">
+      <span>Frontend: S3 + CloudFront</span>
+      <span>Backend: API Gateway + Lambda</span>
+      <span>Data: Dagsmart API</span>
+    </div>
   </main>
 
   <script src="app.js"></script>
