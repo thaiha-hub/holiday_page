@@ -77,7 +77,7 @@ def lambda_handler(event, context):
         "statusCode": 200,
         "headers": {
             "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Origin": "d1bkeswoec9ca5.cloudfront.net",
         },
         "body": json.dumps(result, ensure_ascii=False),
     }
