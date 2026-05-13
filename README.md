@@ -52,12 +52,13 @@ Deployment is automated with GitHub Actions. On every push to `main`, the workfl
 
 | Name | Type | Description |
 |---|---|---|
-| `AWS_ACCESS_KEY_ID` | Secret | AWS access key |
-| `AWS_SECRET_ACCESS_KEY` | Secret | AWS secret key |
+| `AWS_ROLE_ARN` | Secret | ARN of the IAM role to assume via OIDC |
 | `LAMBDA_FUNCTION_NAME` | Secret | Name of the Lambda function |
 | `S3_BUCKET` | Secret | S3 bucket name |
 | `CLOUDFRONT_DISTRIBUTION_ID` | Secret | CloudFront distribution ID |
 | `AWS_REGION` | Variable | AWS region (e.g. `eu-north-1`) |
+
+The workflow uses GitHub OIDC to authenticate with AWS. The IAM role must trust the GitHub OIDC provider (`token.actions.githubusercontent.com`) and include a condition scoped to this repository.
 
 ## Lambda API response
 
@@ -75,16 +76,13 @@ Deployment is automated with GitHub Actions. On every push to `main`, the workfl
 ## Known limitations
 
 - S3 bucket requires public read access (S3 static website hosting).
-- GitHub Actions uses long-lived AWS access keys. A better approach is [GitHub OIDC](https://docs.github.com/en/actions/security-for-github-actions/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services).
-- CORS is set to `Access-Control-Allow-Origin: *`. In production this should be restricted to the CloudFront domain.
+- CORS is restricted to the CloudFront domain.
 - Lambda calls Dagsmart API on every request with no caching.
 
 ## Possible improvements
 
 - CloudFront Origin Access Control (OAC) with a private S3 bucket
-- GitHub OIDC instead of AWS access keys
 - Infrastructure as code with OpenTofu
 - CloudWatch Alarms for Lambda errors and API Gateway 5xx responses
 - Cache Dagsmart API responses in S3 or DynamoDB
-- Restrict CORS to the CloudFront domain
 - Add AWS WAF in front of CloudFront
