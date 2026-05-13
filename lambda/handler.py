@@ -5,6 +5,7 @@ import urllib.error
 
 
 DAGSMART_BASE_URL = "https://api.dagsmart.se"
+FINLAND_BASE_URL = "https://holiday-calendar.fi/api/calendar"
 
 
 def fetch_dagsmart(endpoint: str, year: int):
@@ -17,6 +18,31 @@ def fetch_dagsmart(endpoint: str, year: int):
     except urllib.error.URLError as error:
         print(f"Error calling Dagsmart API: {error}")
         return []
+
+
+def fetch_finland(date_iso: str):
+    url = f"{FINLAND_BASE_URL}?start={date_iso}&end={date_iso}"
+
+    try:
+        with urllib.request.urlopen(url, timeout=5) as response:
+            body = response.read().decode("utf-8")
+            return json.loads(body)
+    except urllib.error.URLError as error:
+        print(f"Error calling Finland API: {error}")
+        return []
+
+
+def find_finland_holidays(data):
+    if not isinstance(data, list):
+        return []
+
+    holidays = []
+    for item in data:
+        if not isinstance(item, dict):
+            continue
+        if not item.get("working_day", True) and item.get("desc"):
+            holidays.append(item["desc"])
+    return holidays
 
 
 def normalize_items(data):
@@ -65,12 +91,18 @@ def lambda_handler(event, context):
     holidays_data = normalize_items(fetch_dagsmart("holidays", year))
     half_days_data = normalize_items(fetch_dagsmart("half-days", year))
     bridge_days_data = normalize_items(fetch_dagsmart("bridge-days", year))
+    finland_data = fetch_finland(today_iso)
 
     result = {
         "date": today_iso,
-        "holidays": find_items_for_date(holidays_data, today_iso),
-        "halfDays": find_items_for_date(half_days_data, today_iso),
-        "bridgeDays": find_items_for_date(bridge_days_data, today_iso),
+        "sweden": {
+            "holidays": find_items_for_date(holidays_data, today_iso),
+            "halfDays": find_items_for_date(half_days_data, today_iso),
+            "bridgeDays": find_items_for_date(bridge_days_data, today_iso),
+        },
+        "finland": {
+            "holidays": find_finland_holidays(finland_data),
+        },
     }
 
     return {
