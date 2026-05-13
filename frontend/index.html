@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Dagens svenska dagar</title>
+  <title>Dagens helgdagar – Sverige & Finland</title>
 
   <style>
     :root {
@@ -20,6 +20,8 @@
       --yellow: #854d0e;
       --purple-soft: #f3e8ff;
       --purple: #6b21a8;
+      --blue-soft: #e0f2fe;
+      --blue: #075985;
       --red-soft: #fee2e2;
       --red: #991b1b;
       --border: #e5e7eb;
@@ -149,6 +151,11 @@
       color: var(--purple);
     }
 
+    .finland-icon {
+      background: var(--blue-soft);
+      color: var(--blue);
+    }
+
     .label {
       font-weight: 800;
       font-size: 1rem;
@@ -216,14 +223,14 @@
 
 <body>
   <main class="card">
-    <div class="badge">🇸🇪 Svensk kalenderstatus</div>
+    <div class="badge">🇸🇪🇫🇮 Kalenderstatus</div>
 
-    <h1>Dagens svenska dagar</h1>
+    <h1>Dagens helgdagar</h1>
 
     <p class="intro">
-      Den här sidan visar dagens datum och kontrollerar om det finns någon svensk
-      helgdag, halvdag eller klämdag. Informationen hämtas automatiskt via ett
-      serverless API på AWS.
+      Den här sidan visar dagens datum och kontrollerar om det finns någon helgdag,
+      halvdag eller klämdag i Sverige eller Finland. Informationen hämtas automatiskt
+      via ett serverless API på AWS.
     </p>
 
     <section class="date-box">
@@ -231,6 +238,7 @@
       <div id="date" class="date">Loading...</div>
     </section>
 
+    <div class="badge" style="background:#dcfce7;color:#166534;">🇸🇪 Sverige</div>
     <section class="grid">
       <div class="section">
         <div class="section-header">
@@ -257,12 +265,23 @@
       </div>
     </section>
 
+    <div class="badge" style="background:#e0f2fe;color:#075985;margin-top:1.2rem;">🇫🇮 Suomi</div>
+    <section class="grid" style="grid-template-columns: 1fr;">
+      <div class="section">
+        <div class="section-header">
+          <div class="icon finland-icon">🎉</div>
+          <div class="label">Juhlapyhät</div>
+        </div>
+        <ul id="finlandHolidays"></ul>
+      </div>
+    </section>
+
     <div id="error" class="error"></div>
 
     <div class="footer">
       <span>Frontend: S3 + CloudFront</span>
       <span>Backend: API Gateway + Lambda</span>
-      <span>Data: Dagsmart API</span>
+      <span>Data: Dagsmart API &amp; holiday-calendar.fi</span>
     </div>
   </main>
 

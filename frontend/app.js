@@ -34,9 +34,10 @@ async function loadToday() {
 
     dateElement.textContent = data.date;
 
-    renderList("holidays", data.holidays);
-    renderList("halfDays", data.halfDays);
-    renderList("bridgeDays", data.bridgeDays);
+    renderList("holidays", data.sweden.holidays);
+    renderList("halfDays", data.sweden.halfDays);
+    renderList("bridgeDays", data.sweden.bridgeDays);
+    renderList("finlandHolidays", data.finland.holidays);
   } catch (error) {
     dateElement.textContent = "Could not load data";
     errorElement.style.display = "block";
